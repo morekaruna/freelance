@@ -1,0 +1,20 @@
+const express = require('express');
+const mongoose = require('mongoose');
+const cors = require('cors');
+const dotenv = require('dotenv');
+dotenv.config();
+const authRoutes = require('./routes/auth');
+const jobRoutes = require('./routes/jobs');
+const bidRoutes = require('./routes/bids');
+const app = express();
+app.use(cors());
+app.use(express.json());
+app.use('/api/auth', authRoutes);
+app.use('/api/jobs', jobRoutes);
+app.use('/api/bids', bidRoutes);
+const PORT = process.env.PORT || 5000;
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/freelance_bidding';
+mongoose.connect(MONGODB_URI).then(()=>{
+  console.log('MongoDB connected');
+  app.listen(PORT, ()=> console.log('Server running on', PORT));
+}).catch(err=> console.error(err));
